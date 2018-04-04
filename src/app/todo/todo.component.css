@@ -43,19 +43,33 @@ button.renameDesk {
   text-align: center;
   font-size: 1em;;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   justify-content: flex-start;
-  min-width: 10em;
-  max-width: 20em;
+  min-width: 20em;
+  max-width: 30em;
   min-height: 16em;
   max-height: 32em;
   position: relative;
-  word-wrap: break-word;
   overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink:0;
 }
 
-.desks .desk .name-desk {
+.task {
+  text-align: center;
+}
 
+input.task {
+  border: none;
+  background: #607D8B;
+  outline: none;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  font-weight: 700;
+}
+
+input.task:focus {
+  border-bottom: 1px solid white;
 }
 
 .desks .desk p {

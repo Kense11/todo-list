@@ -16,5 +16,20 @@
     </button>
     <h4 class="name-desk">Name: {{desk.name}}</h4>
     <p>Id: {{desk.id}}</p>
+    <ul class="tasks">
+      <ng-container *ngFor="let task of tasks">
+        <li class="task" *ngIf="task.deskId == desk.id">
+          <p>
+            <button (click)="completeTask(task.id, task.status)" title="complete task" class="completeTask">&#9745;</button>
+            <input #box (blur)="changeAction(box.value, task.id)" value="{{task.action}}" class="task" [style.background-image]="task.status ? 'linear-gradient(transparent 7px,white 7px,white 9px,transparent 9px)': 'none'">
+            <button (click)="deleteTask(task.id)" title="delete task">x</button>
+          </p>
+        </li>
+      </ng-container>
+    </ul>
+    <div>
+      <button (click)="addTask(taskName.value, desk.id); taskName.value=''" title="add task">+</button>
+      <input #taskName />
+    </div>
   </li>
 </ul>

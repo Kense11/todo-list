@@ -1,7 +1,6 @@
 /* Add application styles & imports to this file! */
 @import '~normalize.css/normalize.css';
 
-
 app-root {
   height: 100%;
 }
@@ -31,6 +30,19 @@ button {
 }
 button:hover {
   background-color: #cfd8dc;
+}
+::-webkit-scrollbar {
+  width: 1em;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #eeeeee;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }
 /* everywhere else */
 *, *:before, *:after {
