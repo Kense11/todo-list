@@ -3,16 +3,20 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { TodoComponent } from './todo/todo.component';
+import { DeskService } from './desk.service';
+import { TaskService } from './task.service';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TodoComponent
   ],
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [DeskService, TaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

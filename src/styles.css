@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+/* Add application styles & imports to this file! */
+@import '~normalize.css/normalize.css';
+
+
+app-root {
+  height: 100%;
+}
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+h4 {
+  font-size: 1.1em;
+  margin: 0.5em;
+}
+body {
+  margin: 2em;
+  height: 80%;
+}
+body, input[text], button {
+  color: #888;
+  font-family: Cambria, Georgia;
+}
+button {
+  background-color: #eee;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: Arial;
+}
+button:hover {
+  background-color: #cfd8dc;
+}
+/* everywhere else */
+*, *:before, *:after {
+  box-sizing: inherit;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,20 @@
+<div>
+  <label>Desk name:
+    <input #deskName />
+  </label>
+  <button (click)="addDesk(deskName.value); deskName.value=''" title="add desk">
+    add desk
+  </button>
+</div>
+<ul class="desks">
+  <li class="desk" *ngFor="let desk of desks">
+    <button (click)="deleteDesk(desk.id)" class="deleteDesk" title="delete desk">
+      x
+    </button>
+    <button (click)="renameDesk(desk.id)" class="renameDesk" title="rename desk">
+      &#9999;
+    </button>
+    <h4 class="name-desk">Name: {{desk.name}}</h4>
+    <p>Id: {{desk.id}}</p>
+  </li>
+</ul>
