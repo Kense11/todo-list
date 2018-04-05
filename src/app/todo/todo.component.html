@@ -20,8 +20,8 @@
       <ng-container *ngFor="let task of tasks">
         <li class="task" *ngIf="task.deskId == desk.id">
           <p>
-            <button (click)="completeTask(task.id, task.status)" title="complete task" class="completeTask">&#9989;</button>
-            <input #box (blur)="changeAction(box.value, task.id)" value="{{task.action}}" class="task" [style.background-image]="task.status ? 'linear-gradient(transparent 7px,white 7px,white 9px,transparent 9px)': 'none'" spellcheck="false">
+            <button (click)="changeTaskStatus(task.id, task.status)" title="change task status" class="changeTaskStatus">&#9989;</button>
+            <input #box (blur)="changeTaskAction(box.value, task.id)" value="{{task.action}}" class="task" [style.background-image]="task.status ? 'linear-gradient(transparent 7px,white 7px,white 9px,transparent 9px)': 'none'" spellcheck="false">
             <button (click)="transferTask(task.id)" title="transfer task">&#9666; &#9656;</button>
             <button (click)="deleteTask(task.id)" title="delete task">&#10008;</button>
           </p>

@@ -45,8 +45,7 @@ button.renameDesk {
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
-  min-width: 20em;
-  max-width: 30em;
+  width: 28em;
   min-height: 16em;
   max-height: 32em;
   position: relative;
