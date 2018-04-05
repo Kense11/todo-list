@@ -96,4 +96,16 @@ export class TodoComponent implements OnInit {
     });
     this.taskService.updateTasks(this.tasks);
   }
+
+  transferTask(id: number): void {
+    const deskId: number = +(prompt('Enter desk Id')).trim();
+    if (!deskId) { return; }
+    if (!(this.desks.filter(desk => desk.id === deskId).length)) { return; }
+    this.tasks.forEach(task => {
+      if (task.id === id) {
+        task.deskId = deskId;
+      }
+    });
+    this.taskService.updateTasks(this.tasks);
+  }
 }
