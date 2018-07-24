@@ -14,12 +14,28 @@ export class TodoComponent implements OnInit {
 
   tasks: Task[];
 
+  testDesks: Desk[];
+
   constructor(private deskService: DeskService,
               private taskService: TaskService) { }
 
   ngOnInit() {
     this.desks = this.deskService.desks;
     this.tasks = this.taskService.tasks;
+    this.testDesks = this.deskService.testDesks;
+    this.getDesks();
+  }
+
+  getDesks(): void {
+    this.deskService.getDesksTest();
+  }
+
+  createDeskTest(name: string): void {
+    this.deskService.createDeskTest({ name });
+  }
+
+  log(): void {
+    console.log(this.testDesks);
   }
 
   addDesk(name: string): void {

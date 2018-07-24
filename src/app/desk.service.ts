@@ -1,15 +1,47 @@
 import { Injectable } from '@angular/core';
 import { Desk } from './desk';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import {of} from 'rxjs/observable/of';
+import {from} from 'rxjs/observable/from';
+import { catchError, map, tap } from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class DeskService {
+
+  private desksUrl = 'http://localhost:3000/api/desks';
+
+  private tasksUrl = 'http://localhost:3000/api/tasks';
 
   desks: Desk[];
 
   lastDeskId: number;
 
-  constructor() {
+  testDesks: BehaviorSubject<Array<Desk>>;
+
+  constructor(
+    private http: HttpClient) {
     this.getDesks();
+    this.getDesksTest();
+  }
+
+  createDeskTest(desk): void {
+    this.http.post<Desk[]>(this.desksUrl, desk)
+      .pipe(
+        catchError(this.handleError('postDesk', []))
+      )
+      .subscribe(
+        this.testDesks.next([...this.testDesks.getValue(), data]);
+      );
+  }
+
+  getDesksTest(): void {
+    this.http.get<Desk[]>(this.desksUrl)
+      .pipe(
+        catchError(this.handleError('getDesks', []))
+      )
+      .subscribe(desks => this.testDesks.next(desks));
   }
 
   getDesks(): void {
@@ -49,4 +81,12 @@ export class DeskService {
     this.updateDesks();
     return this.desks;
   }
+
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
+  }
+
 }
