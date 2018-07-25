@@ -4,7 +4,7 @@ let schema = new mongoose.Schema({
   name: String,
   action: String,
   status: Boolean,
-  deskId: Number
+  deskId: String
 });
 
 module.exports = mongoose.model('Task', schema);

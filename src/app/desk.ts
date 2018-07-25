@@ -1,4 +1,4 @@
 export class Desk {
-  id: number;
+  _id: string;
   name: string;
 }

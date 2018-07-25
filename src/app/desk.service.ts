@@ -3,83 +3,59 @@ import { Desk } from './desk';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
-import {from} from 'rxjs/observable/from';
-import { catchError, map, tap } from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 
 @Injectable()
 export class DeskService {
 
   private desksUrl = 'http://localhost:3000/api/desks';
 
-  private tasksUrl = 'http://localhost:3000/api/tasks';
-
-  desks: Desk[];
-
-  lastDeskId: number;
-
-  testDesks: BehaviorSubject<Array<Desk>>;
+  desks: BehaviorSubject<Array<Desk>>;
 
   constructor(
     private http: HttpClient) {
+    this.desks = new BehaviorSubject([]);
     this.getDesks();
-    this.getDesksTest();
   }
 
-  createDeskTest(desk): void {
-    this.http.post<Desk[]>(this.desksUrl, desk)
-      .pipe(
-        catchError(this.handleError('postDesk', []))
-      )
-      .subscribe(
-        this.testDesks.next([...this.testDesks.getValue(), data]);
-      );
-  }
-
-  getDesksTest(): void {
+  getDesks(): void {
     this.http.get<Desk[]>(this.desksUrl)
       .pipe(
         catchError(this.handleError('getDesks', []))
       )
-      .subscribe(desks => this.testDesks.next(desks));
+      .subscribe(data => this.desks.next(data));
   }
 
-  getDesks(): void {
-    const desksFromStorage: string = localStorage.getItem('deskObject');
-    this.desks = (desksFromStorage) ?
-      JSON.parse(desksFromStorage) :
-      [];
-    this.lastDeskId = Math.max(...this.desks.map(desk => desk.id), 0);
+  createDesk(newDesk: Desk): void {
+    this.http.post<Desk>(this.desksUrl, newDesk)
+      .pipe(
+        catchError(this.handleError('postDesk', []))
+      )
+      .subscribe( (data: Desk) => {
+        this.desks.next([...this.desks.value, data]);
+      });
   }
 
-  updateDesks(): void {
-    localStorage.setItem('deskObject', JSON.stringify(this.desks));
+  updateDesk(id: string, updDesk: Desk): void {
+    this.http.put<Desk>(`${this.desksUrl}/${id}`, updDesk)
+      .pipe(
+        catchError(this.handleError('updateDesk', []))
+      )
+      .subscribe((data: Desk) => {
+        this.desks.next(this.desks.value.map(desk => desk._id === data._id ? data : desk));
+      });
   }
 
-  addDesk(name: string): Desk[] {
-    name = name.trim();
-    if (!name) { return; }
-    const id: number = ++this.lastDeskId;
-    this.desks.push({ name, id } as Desk);
-    this.updateDesks();
-    return this.desks;
-  }
-
-  deleteDesk(id: number): Desk[] {
-    this.desks = this.desks.filter(desk => desk.id !== id);
-    this.updateDesks();
-    return this.desks;
-  }
-
-  renameDesk(id: number, name: string): Desk[] {
-    if (!name) { return; }
-    this.desks.forEach(desk => {
-      if (desk.id === id) {
-        desk.name = name;
-      }
-    });
-    this.updateDesks();
-    return this.desks;
+  deleteDesk(id: string): void {
+    this.http.delete(`${this.desksUrl}/${id}`)
+      .pipe(
+        catchError(this.handleError('deleteDesk', []))
+      )
+      .subscribe((data: Desk) => {
+        this.desks.next(this.desks.value.filter(desk => desk._id !== data._id));
+      });
   }
 
   private handleError<T> (operation = 'operation', result?: T) {

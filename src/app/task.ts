@@ -1,6 +1,6 @@
 export class Task {
-  id: number;
+  _id: string;
   action: string;
   status: boolean;
-  deskId: number;
+  deskId: string;
 }

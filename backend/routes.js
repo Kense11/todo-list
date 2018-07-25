@@ -4,57 +4,69 @@ let Task = require('./models/task');
 let Desk = require('./models/desk');
 
 
-router.get('/', (req, res) => {
-  Desk.create({ name: 'small' }, (err, desk) => (
-    Desk.find(function(err, desks) {
-      if (err)
-        res.send(err);
-      res.json(desks);
-    })
-  ));
-});
-
 router.get('/api/desks', function(req, res) {
-  Desk.find(function(err, desks) {
+  Desk.find(function(err, allDesks) {
     if (err)
       res.send(err);
-    res.json(desks);
-  });
-});
-
-router.get('/api/tasks', function(req, res) {
-  Task.find(function(err, tasks) {
-    if (err)
-      res.send(err);
-    res.json(tasks);
+    res.json(allDesks);
   });
 });
 
 router.post('/api/desks', function(req, res) {
-  Desk.create(req.body, function(err, desks) {
+  Desk.create(req.body, function(err, newDesk) {
     if (err)
       res.send(err);
-    Desk.find(function(err, desks) {
-      if (err)
-        res.send(err);
-      res.json(desks);
-    });
+    res.json(newDesk);
   });
+});
 
+router.put('/api/desks/:_id', function(req, res) {
+  Desk.findByIdAndUpdate(req.params._id, req.body, {new: true}, function (err, updDesk) {
+    if (err)
+      res.send(err);
+    res.json(updDesk);
+  });
 });
 
 router.delete('/api/desks/:_id', function(req, res) {
-  Desk.remove({
-    _id : req.params._id
-  }, function(err, desks) {
+  Desk.findByIdAndDelete(req.params._id, function (err, delDesk) {
     if (err)
       res.send(err);
-    Desk.find(function(err, desks) {
-      if (err)
-        res.send(err);
-      res.json(desks);
-    });
+    res.json(delDesk);
   });
 });
+
+router.get('/api/tasks', function(req, res) {
+  Task.find(function(err, allTasks) {
+    if (err)
+      res.send(err);
+    res.json(allTasks);
+  });
+});
+
+router.post('/api/tasks', function(req, res) {
+  Task.create(req.body, function(err, newTask) {
+    if (err)
+      res.send(err);
+    res.json(newTask);
+  });
+});
+
+router.delete('/api/tasks/:_id', function(req, res) {
+  Task.findByIdAndDelete(req.params._id, function (err, delDesk) {
+    if (err)
+      res.send(err);
+    res.json(delDesk);
+  });
+});
+
+router.delete('/api/tasks/many/:deskId', function(req, res) {
+  Task.deleteMany({ deskId: req.params.deskId}, function (err, delDesk) {
+    if (err)
+      res.send(err);
+    res.json(delDesk);
+  });
+});
+
 
 module.exports = router;
