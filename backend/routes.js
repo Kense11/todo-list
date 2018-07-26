@@ -61,18 +61,18 @@ router.put('/api/tasks/:_id', function(req, res) {
 });
 
 router.delete('/api/tasks/:_id', function(req, res) {
-  Task.findByIdAndDelete(req.params._id, function (err, delDesk) {
+  Task.findByIdAndDelete(req.params._id, function (err, delTask) {
     if (err)
       res.send(err);
-    res.json(delDesk);
+    res.json(delTask);
   });
 });
 
 router.delete('/api/tasks/many/:deskId', function(req, res) {
-  Task.deleteMany({ deskId: req.params.deskId}, function (err, delDesk) {
+  Task.deleteMany({ deskId: req.params.deskId}, function (err, resp) {
     if (err)
       res.send(err);
-    res.json(delDesk);
+    res.json(resp);
   });
 });
 

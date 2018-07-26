@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 import { catchError } from 'rxjs/operators';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Desk} from './desk';
 
 
 @Injectable()
