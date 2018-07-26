@@ -36,18 +36,17 @@ export class TaskService {
         catchError(this.handleError('postTask', []))
       )
       .subscribe( (data: Task) => {
-        console.log(data);
         this.tasks.next([...this.tasks.value, data]);
       });
   }
 
-  updateTask(id: string, updDesk: Desk): void {
-    this.http.put<Desk>(`${this.desksUrl}/${id}`, updDesk)
+  updateTask(updTask: Task): void {
+    this.http.put<Task>(`${this.tasksUrl}/${updTask._id}`, updTask)
       .pipe(
-        catchError(this.handleError('updateDesk', []))
+        catchError(this.handleError('updateTask', []))
       )
-      .subscribe((data: Desk) => {
-        this.desks.next(this.desks.value.map(desk => desk._id === data._id ? data : desk));
+      .subscribe((data: Task) => {
+        this.tasks.next(this.tasks.value.map(tasks => tasks._id === data._id ? data : tasks));
       });
   }
 
@@ -70,38 +69,6 @@ export class TaskService {
         });
     }
   }
-
-  // changeTaskAction(action: string, id: number): Task[] {
-  //   action = action.trim();
-  //   if (!action) { return; }
-  //   this.tasks.forEach(task => {
-  //     if (task.id === id) {
-  //       task.action = action;
-  //     }
-  //   });
-  //   this.updateTasks();
-  //   return this.tasks;
-  // }
-  //
-  // changeTaskStatus(id: number, status: boolean): Task[] {
-  //   this.tasks.forEach(task => {
-  //     if (task.id === id) {
-  //       task.status = !status;
-  //     }
-  //   });
-  //   this.updateTasks();
-  //   return this.tasks;
-  // }
-  //
-  // transferTask(id: number, deskId: number): Task[] {
-  //   this.tasks.forEach(task => {
-  //     if (task.id === id) {
-  //       task.deskId = deskId;
-  //     }
-  //   });
-  //   this.updateTasks();
-  //   return this.tasks;
-  // }
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

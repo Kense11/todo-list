@@ -52,6 +52,14 @@ router.post('/api/tasks', function(req, res) {
   });
 });
 
+router.put('/api/tasks/:_id', function(req, res) {
+  Task.findByIdAndUpdate(req.params._id, req.body, {new: true}, function (err, updTask) {
+    if (err)
+      res.send(err);
+    res.json(updTask);
+  });
+});
+
 router.delete('/api/tasks/:_id', function(req, res) {
   Task.findByIdAndDelete(req.params._id, function (err, delDesk) {
     if (err)

@@ -38,8 +38,8 @@ export class DeskService {
       });
   }
 
-  updateDesk(id: string, updDesk: Desk): void {
-    this.http.put<Desk>(`${this.desksUrl}/${id}`, updDesk)
+  updateDesk(updDesk: Desk): void {
+    this.http.put<Desk>(`${this.desksUrl}/${updDesk._id}`, updDesk)
       .pipe(
         catchError(this.handleError('updateDesk', []))
       )

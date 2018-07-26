@@ -3,6 +3,7 @@ import { Desk } from '../desk';
 import { DeskService } from '../desk.service';
 import { Task } from '../task';
 import { TaskService } from '../task.service';
+import {t} from '@angular/core/src/render3';
 
 
 @Component({
@@ -22,11 +23,6 @@ export class TodoComponent implements OnInit {
     this.getData();
   }
 
-  log() {
-    console.log(this.tasks);
-    console.log(this.desks);
-  }
-
   getData(): void {
     this.deskService.desks.subscribe(
       data => this.desks = data
@@ -42,10 +38,12 @@ export class TodoComponent implements OnInit {
     this.deskService.createDesk({ name } as Desk);
   }
 
-  updateDesk(id: string): void {
+  updateDesk(desk: Desk): void {
     const name: string = (prompt('Enter new name')).trim();
     if (!name) { return; }
-    this.deskService.updateDesk(id, { name } as Desk);
+    const newDesk: Desk = Object.assign({}, desk);
+    newDesk.name = name;
+    this.deskService.updateDesk(newDesk);
   }
 
   deleteDesk(id: string): void {
@@ -53,7 +51,7 @@ export class TodoComponent implements OnInit {
     this.taskService.deleteTask(id, true);
   }
 
-  createTask(action: string, deskId: string): void {
+  createTask(action: string = '', deskId: string): void {
     action = action.trim();
     if (!action) { return; }
     const status = false;
@@ -64,26 +62,27 @@ export class TodoComponent implements OnInit {
     this.taskService.deleteTask(id);
   }
 
+  changeTaskStatus(task: Task): void {
+    const newTask: Task = Object.assign({}, task);
+    newTask.status = !newTask.status;
+    this.taskService.updateTask(newTask);
+  }
 
+  changeTaskAction(newAction: string = '', task: Task): void {
+    newAction = newAction.trim();
+    if (!newAction) { return; }
+    const newTask: Task = Object.assign({}, task);
+    newTask.action = newAction;
+    this.taskService.updateTask(newTask);
+  }
 
-  // changeTaskAction(action: string, id: number): void {
-  //   const tasks: Task[] = this.taskService.changeTaskAction(action, id);
-  //   if (tasks) {
-  //     this.tasks = tasks;
-  //   }
-  // }
-  //
-  // changeTaskStatus(id: number, status: boolean): void {
-  //   this.tasks = this.taskService.changeTaskStatus(id, status);
-  // }
-  //
-  // transferTask(id: number): void {
-  //   const deskId: number = +(prompt('Enter desk Id')).trim();
-  //   if (!deskId) { return; }
-  //   if (!(this.desks.filter(desk => desk._id === deskId).length)) { return; }
-  //   const tasks: Task[] = this.taskService.transferTask(id, deskId);
-  //   if (tasks) {
-  //     this.tasks = tasks;
-  //   }
-  // }
+  transferTask(task: Task): void {
+    const deskId: string = (prompt('Enter desk Id') || '').trim();
+    if (!deskId) { return; }
+    if (!(this.desks.filter(desk => desk._id === deskId).length)) { return; }
+    const newTask: Task = Object.assign({}, task);
+    newTask.deskId = deskId;
+    this.taskService.updateTask(newTask);
+  }
+
 }
