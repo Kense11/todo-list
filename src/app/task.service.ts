@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Task } from './task';
+import { Task } from './models/task';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import {of} from 'rxjs/observable/of';
+import { of } from 'rxjs/observable/of';
 import { catchError } from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class TaskService {
@@ -13,6 +12,13 @@ export class TaskService {
   private tasksUrl = 'http://localhost:3000/api/tasks';
 
   tasks: BehaviorSubject<Array<Task>>;
+
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
+  }
 
   constructor(
     private http: HttpClient
@@ -68,12 +74,4 @@ export class TaskService {
         });
     }
   }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
-  }
-
 }

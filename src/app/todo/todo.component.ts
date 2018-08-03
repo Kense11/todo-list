@@ -1,33 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { Desk } from '../desk';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Desk } from '../models/desk';
 import { DeskService } from '../desk.service';
-import { Task } from '../task';
+import { Task } from '../models/task';
 import { TaskService } from '../task.service';
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.css']
 })
-export class TodoComponent implements OnInit {
+export class TodoComponent implements OnInit, OnDestroy {
+
   desks: Desk[];
 
   tasks: Task[];
 
+  subscriptions = new Subscription();
+
   constructor(private deskService: DeskService,
-              private taskService: TaskService) { }
+              private taskService: TaskService) {}
 
   ngOnInit() {
     this.getData();
   }
 
   getData(): void {
-    this.deskService.desks.subscribe(
-      data => this.desks = data
+    this.subscriptions.add(
+      this.deskService.desks.subscribe(
+        data => this.desks = data
+      )
     );
-    this.taskService.tasks.subscribe(
-      data => this.tasks = data
+    this.subscriptions.add(
+      this.taskService.tasks.subscribe(
+        data => this.tasks = data
+      )
     );
   }
 
@@ -84,4 +91,7 @@ export class TodoComponent implements OnInit {
     this.taskService.updateTask(newTask);
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 }

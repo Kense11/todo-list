@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Desk } from './desk';
+import { Desk } from './models/desk';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import {of} from 'rxjs/observable/of';
+import { of } from 'rxjs/observable/of';
 import { catchError } from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class DeskService {
@@ -13,6 +12,13 @@ export class DeskService {
   private desksUrl = 'http://localhost:3000/api/desks';
 
   desks: BehaviorSubject<Array<Desk>>;
+
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
+  }
 
   constructor(
     private http: HttpClient) {
@@ -57,12 +63,4 @@ export class DeskService {
         this.desks.next(this.desks.value.filter(desk => desk._id !== data._id));
       });
   }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
-  }
-
 }
